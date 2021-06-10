@@ -34,6 +34,21 @@ pipeline {
 			defaultValue: 'master',
 			description: 'Add branch to build'
 		)
+		booleanParam(
+			name: 'SCRATCH_BUILD',
+			defaultValue: false,
+			description: 'Rebuild from scratch'
+		)
+		booleanParam(
+			name: 'CACHE_BUILD',
+			defaultValue: false,
+			description: 'Rebuild from cache'
+		)
+		booleanParam(
+			name: 'SSTATE_UPDATE',
+			defaultValue: true,
+			description: 'Update sstate cache after sucessful build'
+		)
 	}
 
 	stages {
@@ -42,9 +57,39 @@ pipeline {
 				git branch: "${params.BRANCH}", url: 'https://github.com/saxofon/yocto-rpi.git'
 			}
 		}
+		stage("Rebuild from scratch") {
+			when {
+				expression {
+					params.SCRATCH_BUILD == true
+				}
+			}
+			steps {
+				sh "rm -rf build cache downloads"
+			}
+		}
+		stage("Rebuild from cache") {
+			when {
+				expression {
+					params.CACHE_BUILD == true
+				}
+			}
+			steps {
+				sh "make clean"
+			}
+		}
 		stage("Build images") {
 			steps {
 				sh "make images"
+			}
+		}
+		stage("Update sstate cache") {
+			when {
+				expression {
+					params.SSTATE_UPDATE == true
+				}
+			}
+			steps {
+				sh "make sstate-update"
 			}
 		}
 		
