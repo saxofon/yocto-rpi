@@ -5,7 +5,7 @@
 
 SHELL		:= /bin/bash
 TOP 		:= $(shell pwd)
-BDIR            := $(TOP)/build2
+BDIR            := $(TOP)/build
 
 # Define V=1 to echo everything
 V ?= 0
@@ -44,7 +44,7 @@ LAYERS += $(TOP)/layers/meta-project-setup
 
 clean::
 
-distclean: clean
+distclean:: clean
 
 top-help:
 	@echo -e "\n--- top Makefile ---"

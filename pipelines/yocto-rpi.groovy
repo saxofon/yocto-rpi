@@ -64,7 +64,7 @@ pipeline {
 				}
 			}
 			steps {
-				sh "rm -rf build cache downloads"
+				sh "make distclean"
 			}
 		}
 		stage("Rebuild from cache") {

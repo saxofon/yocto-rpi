@@ -11,3 +11,6 @@ sstate-update:
 	$(Q)mkdir -p $(SSTATE_MIRROR)
 	$(Q)rsync -a $(SSTATE_LOCAL)/ $(SSTATE_MIRROR)
 	$(Q)chmod g+w -R $(SSTATE_MIRROR)
+
+distclean::
+	$(RM) -r $(SSTATE_MIRROR)

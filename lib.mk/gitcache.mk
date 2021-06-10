@@ -19,3 +19,5 @@ define gitcache
 	chmod -R -f g+w $(2)
 endef
 
+distclean::
+	$(RM) -r $(DOWNLOADS_CACHE)
