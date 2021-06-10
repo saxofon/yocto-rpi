@@ -6,7 +6,7 @@
 Fetch the project project repo as
 
 ```
-git clone ssh://git@bitbucket.wrs.com:7999/~phallsma/yocto-starlingx.git
+git clone https://github.com/saxofon/yocto-rpi.git
 ```
 
 ## Build
