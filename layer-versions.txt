@@ -1,0 +1,4 @@
+POKY_REV := hardknott
+OPENEMBEDDED_REV := hardknott
+RASPBERRYPI_REV := hardknott
+QT5_REV := hardknott
