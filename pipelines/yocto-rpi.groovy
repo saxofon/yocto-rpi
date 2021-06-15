@@ -57,7 +57,7 @@ pipeline {
 				git branch: "${params.BRANCH}", url: 'https://github.com/saxofon/yocto-rpi.git'
 			}
 		}
-		stage("Rebuild from scratch") {
+		stage("Clean out build AND caches") {
 			when {
 				expression {
 					params.SCRATCH_BUILD == true
@@ -67,7 +67,7 @@ pipeline {
 				sh "make distclean"
 			}
 		}
-		stage("Rebuild from cache") {
+		stage("Clean out build") {
 			when {
 				expression {
 					params.CACHE_BUILD == true
