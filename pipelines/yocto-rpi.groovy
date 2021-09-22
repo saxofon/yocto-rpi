@@ -15,8 +15,7 @@
 pipeline {
 	agent {
 		docker {
-			image 'docker.io/saxofon/yocto-builder:0.1'
-			args '--name=yocto-builder'
+			image 'docker.io/saxofon/yocto-builder:0.4'
 			args '-v /var/jenkins_home:/var/jenkins_home:Z'
 			args '--entrypoint=""'
 		/*	reuseNode true */

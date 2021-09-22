@@ -1,3 +1,4 @@
+BUILD_CONTAINER_IMAGE = docker.io/saxofon/yocto-builder:0.4
 BUILD_CONTAINER ?= yocto-builder
 
 help:: build-container-help
@@ -11,10 +12,13 @@ build-container-help:
 	
 
 build-container-image:
-	docker build -f dockerfiles/yocto-builder -t yocto-builder:0.1 dockerfiles
+	docker build -f dockerfiles/yocto-builder -t $(BUILD_CONTAINER_IMAGE) dockerfiles
+
+build-container-image-push:
+	docker push $(BUILD_CONTAINER_IMAGE)
 
 build-container-start:
-	$(Q)docker run --rm -d --name $(BUILD_CONTAINER) -u builder -v /opt:/opt:shared -it yocto-builder:0.1 /bin/bash
+	$(Q)docker run --rm -d --name $(BUILD_CONTAINER) -u builder -v /opt:/opt:shared -it $(BUILD_CONTAINER_IMAGE) /bin/bash
 
 build-container-shell:
 	$(Q)docker exec -u builder -w $(shell pwd) -e LANG=en_US.UTF-8 -it $(BUILD_CONTAINER) /bin/bash

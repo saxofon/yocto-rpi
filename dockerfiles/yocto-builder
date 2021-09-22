@@ -8,13 +8,15 @@ RUN apt-get clean && apt-get update \
 
 RUN DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
-RUN apt install -y bash build-essential git-core wget socat chrpath cpio unzip texinfo \
+RUN apt install -y bash sudo build-essential git-core wget socat chrpath cpio unzip texinfo \
      gawk diffstat gcc-multilib xz-utils iputils-ping \
      python3 python3-pip python3-pexpect python3-git python3-jinja2 pylint3 \
      libelf-dev bison flex bc kmod jq rsync \
   && ln -sf /bin/bash /bin/sh \
   && sed s#^SHELL.*#SHELL=/bin/bash#g -i /etc/default/useradd
 
-RUN useradd -c "My name is Builder, Yocto Builder" -G users builder
+RUN useradd -c "My name is Builder, Yocto Builder" -d /home/builder -G users builder
+RUN echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-#     libegl1-mesa libsdl1.2-dev debianutils
+USER builder
+WORKDIR /home/builder
