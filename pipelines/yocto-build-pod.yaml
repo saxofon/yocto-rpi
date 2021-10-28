@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:  
+    - name: yocto-builder
+      image: docker.io/saxofon/yocto-builder:0.4
+      command: ["tail", "-f", "/dev/null"]  
+      imagePullPolicy: Always 
+#      resources:  # limits the resources your build contaienr
+#        requests:
+#          memory: "32Gi"
+#          cpu: "4"
+#        limits:
+#          memory: "32Gi"
+#          cpu: "4"
+    - name: docker
+      image: docker:18.06.1
+      command: ["tail", "-f", "/dev/null"]
+      imagePullPolicy: Always
+      volumeMounts:
+        - name: docker
+          mountPath: /var/run/docker.sock # We use the k8s host docker engine
+        - name: node-data-dir    
+          mountPath: /data  
+  volumes:
+    - name: docker
+      hostPath:
+        path: /var/run/docker.sock
+    - name: node-data-dir
+      hostPath:
+        path: NODE_HOSTPATH
