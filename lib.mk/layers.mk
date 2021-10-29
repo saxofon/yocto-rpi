@@ -6,8 +6,8 @@ endef
 layer-revisions:
 	$(foreach LAYER,$(LAYERS),git -C $(LAYER) rev-parse HEAD;)
 
-#POKY_URL = git://git.yoctoproject.org/poky.git
-POKY_URL = https://git.yoctoproject.org/git/poky
+POKY_URL = git://git.yoctoproject.org/poky.git
+#POKY_URL = https://git.yoctoproject.org/git/poky
 POKY_REV ?= yocto-2.7
 
 OPENEMBEDDED_URL = https://github.com/openembedded/meta-openembedded.git
