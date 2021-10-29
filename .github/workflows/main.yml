@@ -11,8 +11,18 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: build cache
+        id: cache-download-sstate
+        uses: actions/cache@v2
+        with:
+          path: cache
+          key: cache
+
       - name: Workaround to allow action to run as non-root
         run: sudo chmod 777 .
 
       - name: build
         run: make images
+
+      - name: update sstate cache
+        run: make sstate-update
