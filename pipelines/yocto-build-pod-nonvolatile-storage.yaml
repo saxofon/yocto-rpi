@@ -6,16 +6,9 @@ spec:
       image: docker.io/saxofon/yocto-builder:0.6
       command: ["tail", "-f", "/dev/null"]  
       imagePullPolicy: Always 
-#      volumeMounts:
-#      - mountPath: /cache
-#        name: cache-volume
-#      resources:  # limits the resources your build contaienr
-#        requests:
-#          memory: "32Gi"
-#          cpu: "4"
-#        limits:
-#          memory: "32Gi"
-#          cpu: "4"
+      volumeMounts:
+      - mountPath: /cache
+        name: cache-volume
     - name: docker
       image: docker:18.06.1
       command: ["tail", "-f", "/dev/null"]
@@ -32,7 +25,7 @@ spec:
     - name: node-data-dir
       hostPath:
         path: NODE_HOSTPATH
-#    - name: cache-volume
-#      awsElasticBlockStore:
-#        volumeID: "vol-003aac349f608e970"
-#        fsType: ext4
+    - name: cache-volume
+      awsElasticBlockStore:
+        volumeID: "vol-003aac349f608e970"
+        fsType: ext4
