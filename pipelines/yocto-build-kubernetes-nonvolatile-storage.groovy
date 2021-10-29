@@ -17,7 +17,7 @@
 pipeline {
 	agent {
 		kubernetes {
-			yamlFile 'pipelines/yocto-build-pod.yaml'
+			yamlFile 'pipelines/yocto-build-pod-nonvolatile-storage.yaml'
 			defaultContainer 'yocto-builder'
 		}
 	}
