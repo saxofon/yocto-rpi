@@ -61,6 +61,7 @@ pipeline {
 				script {
 					sh "sudo mkdir -p /cache"
 					sh "sudo chmod 777 /cache"
+					sh "df -h /cache"
 				}
 			}
 		}
