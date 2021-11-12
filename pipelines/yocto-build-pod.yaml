@@ -5,7 +5,7 @@ spec:
     - name: yocto-builder
       image: docker.io/saxofon/yocto-builder:0.6
       command: ["tail", "-f", "/dev/null"]  
-      imagePullPolicy: Always 
+      imagePullPolicy: IfNotPresent
 #      volumeMounts:
 #      - mountPath: /cache
 #        name: cache-volume
@@ -22,16 +22,37 @@ spec:
       imagePullPolicy: Always
       volumeMounts:
         - name: docker
-          mountPath: /var/run/docker.sock # We use the k8s host docker engine
+          mountPath: /var/run/docker.sock
         - name: node-data-dir    
           mountPath: /data  
+  tolerations:
+    - key: "kubernetes.azure.com/scalesetpriority"
+      operator: "Equal"
+      value: "spot"
+      effect: "NoSchedule"
+    - key: "kubernetes.azure.com/scalesetpriority"
+      operator: "Equal"
+      value: "scalable"
+      effect: "NoSchedule"
+    - key: "spotInstance"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+    - key: "purpose"
+      operator: "Equal"
+      value: "scalable"
+      effect: "NoSchedule"
+    - key: "team"
+      operator: "Equal"
+      value: "linux"
+      effect: "NoSchedule"
   volumes:
     - name: docker
       hostPath:
         path: /var/run/docker.sock
     - name: node-data-dir
       hostPath:
-        path: NODE_HOSTPATH
+        path: /data
 #    - name: cache-volume
 #      awsElasticBlockStore:
 #        volumeID: "vol-003aac349f608e970"

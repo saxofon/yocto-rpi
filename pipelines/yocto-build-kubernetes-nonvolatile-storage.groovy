@@ -56,6 +56,30 @@ pipeline {
 		)
 	}
 	stages {
+		stage("Debug") {
+			steps {
+				script {
+					sh "du -sh /data"
+					sh "ls /data"
+				}
+			}
+		}
+		stage("Setup minio client for artifact handling") {
+			when {
+				expression {
+					env.MINIO_URL != null
+				}
+			}
+			steps {
+				script {
+					sh "sudo mkdir -p ~/.mc"
+					sh "sudo chmod 777 ~/.mc"
+					sh "wget https://dl.min.io/client/mc/release/linux-amd64/mc"
+					sh "chmod +x mc"
+					sh "./mc config host add minio \"${env.MINIO_URL}\" \"${env.MINIO_ACCESS_KEY}\" \"${env.MINIO_SECRET_KEY}\""
+				}
+			}
+		}
 		stage("Arrange permissions for cache") {
 			steps {
 				script {
@@ -105,9 +129,24 @@ pipeline {
 				sh "make sstate-update"
 			}
 		}
-		stage("Return PLM") {
+		stage("Store artifacts") {
+			when {
+				expression {
+					env.MINIO_URL != null
+				}
+			}
 			steps {
-				print """BEGIN OUTPUT{"output1": "build/build/tmp/deploy/images/raspberrypi4-64/", "artifactPath": "${params.PARAM5}/${BUILD_NUMBER}/"}END OUTPUT"""
+				sh "du -sh build"
+				sh "du -sh build/build/tmp/deploy/images/raspberrypi4-64"
+				sh "./mc mkdir minio/${params.PARAM5}/${BUILD_NUMBER}"
+				sh "./mc cp --recursive build/build/tmp/deploy/images/raspberrypi4-64/ minio/${params.PARAM5}/${BUILD_NUMBER}"
+			}
+		}
+		stage("Return to PLM") {
+			steps {
+				script {
+					print """BEGIN OUTPUT{"output1": "build/build/tmp/deploy/images/raspberrypi4-64/", "artifactPath": "${params.PARAM5}/${BUILD_NUMBER}/"}END OUTPUT"""
+				}
 			}
 		}
 	}
