@@ -56,11 +56,58 @@ pipeline {
 		)
 	}
 	stages {
+		stage("debug") {
+			steps {
+				script {
+					sh "printenv"
+					sh "ls /data || true"
+					sh "df -h /data || true"
+				}
+			}
+		}
+		stage("Prepare for artifacts handling") {
+			when {
+				expression {
+					env.INTERNAL_ARTIFACTS_HTTP != null
+				}
+			}
+			steps {
+				script {
+					sh "sudo mkdir -p ~/.mc"
+					sh "sudo chmod 777 ~/.mc"
+					sh "wget https://dl.min.io/client/mc/release/linux-amd64/mc"
+					sh "chmod +x mc"
+					withCredentials([usernamePassword(credentialsId: 'artifacts-credentials', usernameVariable: 'MINIO_ACCESS_KEY', passwordVariable: 'MINIO_SECRET_KEY')]) {
+						sh './mc config host add minio \"${INTERNAL_ARTIFACTS_HTTP}\" \"${MINIO_ACCESS_KEY}\" \"${MINIO_SECRET_KEY}\"'
+					}
+				}
+			}
+		}
 		stage("Arrange permissions for cache") {
 			steps {
 				script {
 					sh "sudo mkdir -p /cache"
 					sh "sudo chmod 777 /cache"
+				}
+			}
+		}
+		stage("prebuild workaround for cache storage") {
+			when {
+				allOf {
+					expression {
+						env.INTERNAL_ARTIFACTS_HTTP != null
+					}
+					expression {
+						params.PARAM5 != null
+					}
+				}
+			}
+			steps {
+				script {
+					sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache / || true"
+					sh "ls /cache"
+					sh "ls /cache/downloads || true"
+					sh "ls /cache/sstate-mirror || true"
 				}
 			}
 		}
@@ -104,9 +151,60 @@ pipeline {
 				sh "make sstate-update"
 			}
 		}
-		stage("Return PLM") {
+		stage("postbuild workaround for cache storage") {
+			when {
+				allOf {
+					expression {
+						env.INTERNAL_ARTIFACTS_HTTP != null
+					}
+					expression {
+						params.PARAM5 != null
+					}
+				}
+			}
 			steps {
-				print """BEGIN OUTPUT{"output1": "build/build/tmp/deploy/images/raspberrypi4-64/", "artifactPath": "${params.PARAM5}/${BUILD_NUMBER}/"}END OUTPUT"""
+				script {
+					sh "./mc cp --quiet --recursive /cache minio/${params.PARAM5} || true"
+					sh "./mc ls minio/${params.PARAM5} || true"
+					sh "./mc ls minio/${params.PARAM5}/cache || true"
+					sh "./mc ls minio/${params.PARAM5}/cache/downloads || true"
+					sh "./mc ls minio/${params.PARAM5}/cache/sstate-mirror || true"
+				}
+			}
+		}
+		stage("Store artifacts") {
+			when {
+				allOf {
+					expression {
+						env.INTERNAL_ARTIFACTS_HTTP != null
+					}
+					expression {
+						params.PARAM5 != null
+					}
+				}
+			}
+			steps {
+				script {
+					sh "du -sh build"
+					sh "du -sh build/build/tmp/deploy/images/raspberrypi4-64"
+					sh "ls build/build/tmp/deploy/images/raspberrypi4-64"
+					sh "./mc mb minio/${params.PARAM5}/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/Image minio/${params.PARAM5}/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/bcm2711-rpi-4-b.dtb minio/${params.PARAM5}/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/core-image-base-raspberrypi4-64.wic minio/${params.PARAM5}/${BUILD_NUMBER}"
+				}
+			}
+		}
+		stage("Return to PLM") {
+			when {
+				expression {
+					params.PARAM5 != null
+				}
+			}
+			steps {
+				script {
+					print """BEGIN OUTPUT{"output1": "Image", "artifactPath": "${params.PARAM5}/${BUILD_NUMBER}/"}END OUTPUT"""
+				}
 			}
 		}
 	}
