@@ -15,6 +15,7 @@ define gitcache
 		git -C $(DOWNLOADS_CACHE)/git2 clone --mirror $(1) $$gitbase ; \
 		git clone $(DOWNLOADS_CACHE)/git2/$$gitbase $(2) ; \
 		git -C $(2) remote add upstream $(1) ; \
+		find $(DOWNLOADS_CACHE)/git2 -type d -empty -exec touch {}/.gitkeep \; ; \
 	fi ; \
 	chmod -R -f g+w $(2)
 endef
