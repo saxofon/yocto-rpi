@@ -104,10 +104,12 @@ pipeline {
 			}
 			steps {
 				script {
-					sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache / || true"
-					sh "ls /cache"
-					sh "ls /cache/downloads || true"
-					sh "ls /cache/sstate-mirror || true"
+					//sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache / || true"
+					//sh "ls /cache"
+					//sh "ls /cache/downloads || true"
+					//sh "ls /cache/sstate-mirror || true"
+					sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache.tar /tmp || true"
+					sh "tar -C /cache -xf /tmp/cache.tar || true"
 				}
 			}
 		}
@@ -164,11 +166,13 @@ pipeline {
 			}
 			steps {
 				script {
-					sh "./mc cp --quiet --recursive /cache minio/${params.PARAM5} || true"
-					sh "./mc ls minio/${params.PARAM5} || true"
-					sh "./mc ls minio/${params.PARAM5}/cache || true"
-					sh "./mc ls minio/${params.PARAM5}/cache/downloads || true"
-					sh "./mc ls minio/${params.PARAM5}/cache/sstate-mirror || true"
+					//sh "./mc cp --quiet --recursive /cache minio/${params.PARAM5} || true"
+					//sh "./mc ls minio/${params.PARAM5} || true"
+					//sh "./mc ls minio/${params.PARAM5}/cache || true"
+					//sh "./mc ls minio/${params.PARAM5}/cache/downloads || true"
+					//sh "./mc ls minio/${params.PARAM5}/cache/sstate-mirror || true"
+					sh "tar -C /cache -cf /tmp/cache.tar ."
+					sh "./mc cp --quiet /tmp/cache.tar minio/${params.PARAM5} || true"
 				}
 			}
 		}
