@@ -6,9 +6,9 @@ spec:
       image: docker.io/saxofon/yocto-builder:0.6
       command: ["tail", "-f", "/dev/null"]  
       imagePullPolicy: IfNotPresent
-#      volumeMounts:
-#      - mountPath: /cache
-#        name: cache-volume
+      volumeMounts:
+      - mountPath: /cache
+        name: cache-volume
 #      resources:  # limits the resources your build contaienr
 #        requests:
 #          memory: "32Gi"
@@ -53,7 +53,9 @@ spec:
     - name: node-data-dir
       hostPath:
         path: /data
-#    - name: cache-volume
+    - name: cache-volume
+      persistentVolumeClaim:
+        claimName: phallsma-g4-storage
 #      awsElasticBlockStore:
 #        volumeID: "vol-003aac349f608e970"
 #        fsType: ext4
