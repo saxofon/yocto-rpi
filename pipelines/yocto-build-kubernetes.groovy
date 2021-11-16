@@ -84,8 +84,6 @@ pipeline {
 		stage("Arrange permissions for cache") {
 			steps {
 				script {
-					sh "sudo mkdir -p /cache"
-					sh "sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport phallsma-g4-storage:/  /cache"
 					sh "sudo chmod 777 /cache"
 				}
 			}
@@ -114,7 +112,6 @@ pipeline {
 			}
 		}
 		stage("Git clone project") {
-			when { expression { false } }
 			steps {
 				git branch: "${params.BRANCH}", url: "${params.GIT_REPO}"
 			}
@@ -140,16 +137,16 @@ pipeline {
 			}
 		}
 		stage("Build images") {
-			when { expression { false } }
 			steps {
 				sh "make images"
 			}
 		}
 		stage("Update sstate cache") {
-			when { expression { false } }
 			when {
-				expression {
-					params.SSTATE_UPDATE == true
+				allOf {
+					expression {
+						params.SSTATE_UPDATE == true
+					}
 				}
 			}
 			steps {
@@ -189,7 +186,6 @@ pipeline {
 					expression {
 						params.PARAM5 != null
 					}
-					expression { false }
 				}
 			}
 			steps {
@@ -197,10 +193,10 @@ pipeline {
 					sh "du -sh build"
 					sh "du -sh build/build/tmp/deploy/images/raspberrypi4-64"
 					sh "ls build/build/tmp/deploy/images/raspberrypi4-64"
-					sh "./mc mb minio/${params.PARAM5}/${BUILD_NUMBER}"
-					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/Image minio/${params.PARAM5}/${BUILD_NUMBER}"
-					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/bcm2711-rpi-4-b.dtb minio/${params.PARAM5}/${BUILD_NUMBER}"
-					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/core-image-base-raspberrypi4-64.wic minio/${params.PARAM5}/${BUILD_NUMBER}"
+					sh "./mc mb minio/${params.PARAM5}/build/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/Image minio/${params.PARAM5}/build/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/bcm2711-rpi-4-b.dtb minio/${params.PARAM5}/build/${BUILD_NUMBER}"
+					sh "./mc cp build/build/tmp/deploy/images/raspberrypi4-64/core-image-base-raspberrypi4-64.wic minio/${params.PARAM5}/build/${BUILD_NUMBER}"
 				}
 			}
 		}
@@ -212,7 +208,7 @@ pipeline {
 			}
 			steps {
 				script {
-					print """BEGIN OUTPUT{"output1": "Image", "artifactPath": "${params.PARAM5}/${BUILD_NUMBER}/"}END OUTPUT"""
+					print """BEGIN OUTPUT{"output1": "Image", "artifactPath": "${params.PARAM5}/build/${BUILD_NUMBER}/"}END OUTPUT"""
 				}
 			}
 		}
