@@ -60,8 +60,6 @@ pipeline {
 			steps {
 				script {
 					sh "printenv"
-					sh "ls /data || true"
-					sh "df -h /data || true"
 				}
 			}
 		}
@@ -87,6 +85,7 @@ pipeline {
 			steps {
 				script {
 					sh "sudo mkdir -p /cache"
+					sh "sudo mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport phallsma-g4-storage:/  /cache"
 					sh "sudo chmod 777 /cache"
 				}
 			}
@@ -100,6 +99,7 @@ pipeline {
 					expression {
 						params.PARAM5 != null
 					}
+					expression { false }
 				}
 			}
 			steps {
@@ -114,6 +114,7 @@ pipeline {
 			}
 		}
 		stage("Git clone project") {
+			when { expression { false } }
 			steps {
 				git branch: "${params.BRANCH}", url: "${params.GIT_REPO}"
 			}
@@ -139,11 +140,13 @@ pipeline {
 			}
 		}
 		stage("Build images") {
+			when { expression { false } }
 			steps {
 				sh "make images"
 			}
 		}
 		stage("Update sstate cache") {
+			when { expression { false } }
 			when {
 				expression {
 					params.SSTATE_UPDATE == true
@@ -162,6 +165,7 @@ pipeline {
 					expression {
 						params.PARAM5 != null
 					}
+					expression { false }
 				}
 			}
 			steps {
@@ -185,6 +189,7 @@ pipeline {
 					expression {
 						params.PARAM5 != null
 					}
+					expression { false }
 				}
 			}
 			steps {
