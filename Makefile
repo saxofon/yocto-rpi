@@ -22,7 +22,8 @@ help:: top-help
 -include userconfig-$(USER).mk
 -include layer-versions.txt
 
-MACHINES += raspberrypi4-64
+#MACHINES += raspberrypi4-64
+MACHINES += raspberrypi0-wifi
 
 IMAGES += core-image-base
 
