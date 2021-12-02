@@ -6,12 +6,16 @@ endef
 layer-revisions:
 	$(foreach LAYER,$(LAYERS),git -C $(LAYER) rev-parse HEAD;)
 
+#BASE=honister
+BASE=hardknott
+
 POKY_URL = git://git.yoctoproject.org/poky.git
 #POKY_URL = https://git.yoctoproject.org/git/poky
-POKY_REV ?= yocto-2.7
+#POKY_REV ?= yocto-3.4
+POKY_REV ?= $(BASE)
 
 OPENEMBEDDED_URL = https://github.com/openembedded/meta-openembedded.git
-OPENEMBEDDED_REV ?= hardknott
+OPENEMBEDDED_REV ?= $(BASE)
 $(BDIR)/layers/meta-openembedded/meta-filesystems: $(BDIR)/layers/meta-openembedded
 $(BDIR)/layers/meta-openembedded/meta-gnome: $(BDIR)/layers/meta-openembedded
 $(BDIR)/layers/meta-openembedded/meta-initramfs: $(BDIR)/layers/meta-openembedded
@@ -24,53 +28,53 @@ $(BDIR)/layers/meta-openembedded:
 	$(Q)$(call layer-unpack, $@, $(OPENEMBEDDED_URL), $(OPENEMBEDDED_REV))
 
 PYTHON2_URL = git://git.openembedded.org/meta-python2
-PYTHON2_REV ?= hardknott
+PYTHON2_REV ?= $(BASE)
 $(BDIR)/layers/meta-python2:
 	$(Q)$(call layer-unpack, $@, $(PYTHON2_URL), $(PYTHON2_REV))
 
 VIRTUALIZATION_URL = git://git.yoctoproject.org/meta-virtualization.git
-VIRTUALIZATION_REV ?= hardknott
+VIRTUALIZATION_REV ?= $(BASE)
 $(BDIR)/layers/meta-virtualization:
 	$(Q)$(call layer-unpack, $@, $(VIRTUALIZATION_URL), $(VIRTUALIZATION_REV))
 
 CLOUDSERVICES_URL = git://git.yoctoproject.org/meta-cloud-services.git
-CLOUDSERVICES_REV ?= hardknott
+CLOUDSERVICES_REV ?= $(BASE)
 $(BDIR)/layers/meta-cloud-services/meta-openstack: $(BDIR)/layers/meta-cloud-services
 $(BDIR)/layers/meta-cloud-services:
 	$(Q)$(call layer-unpack, $@, $(CLOUDSERVICES_URL), $(CLOUDSERVICES_REV))
 
 ANACONDA_URL = git://git.yoctoproject.org/meta-anaconda
-ANACONDA_REV ?= hardknott
+ANACONDA_REV ?= $(BASE)
 $(BDIR)/layers/meta-anaconda:
 	$(Q)$(call layer-unpack, $@, $(ANACONDA_URL), $(ANACONDA_REV))
 
 INTEL_URL = git://git.yoctoproject.org/meta-intel.git
-INTEL_REV ?= hardknott
+INTEL_REV ?= $(BASE)
 $(BDIR)/layers/meta-intel:
 	$(Q)$(call layer-unpack, $@, $(INTEL_URL), $(INTEL_REV))
 
 DPDK_URL = git://git.yoctoproject.org/meta-dpdk.git
-DPDK_REV ?= hardknott
+DPDK_REV ?= $(BASE)
 $(BDIR)/layers/meta-dpdk:
 	$(Q)$(call layer-unpack, $@, $(DPDK_URL), $(DPDK_REV))
 
 SECURITY_URL = git://git.yoctoproject.org/meta-security.git
-SECURITY_REV ?= hardknott
+SECURITY_REV ?= $(BASE)
 $(BDIR)/layers/meta-security:
 	$(Q)$(call layer-unpack, $@, $(SECURITY_URL), $(SECURITY_REV))
 
 SELINUX_URL = git://git.yoctoproject.org/meta-selinux.git
-SELINUX_REV ?= hardknott
+SELINUX_REV ?= $(BASE)
 $(BDIR)/layers/meta-selinux:
 	$(Q)$(call layer-unpack, $@, $(SELINUX_URL), $(SELINUX_REV))
 
 IOTCLOUD_URL = https://github.com/intel-iot-devkit/meta-iot-cloud.git
-IOTCLOUD_REV ?= hardknott
+IOTCLOUD_REV ?= $(BASE)
 $(BDIR)/layers/meta-iot-cloud:
 	$(Q)$(call layer-unpack, $@, $(IOTCLOUD_URL), $(IOTCLOUD_REV))
 
 STX_URL = https://opendev.org/starlingx/meta-starlingx.git
-STARLINGX_REV ?= master
+STARLINGX_REV ?= $(BASE)
 $(BDIR)/layers/meta-starlingx/meta-stx-cloud: $(BDIR)/layers/meta-starlingx
 $(BDIR)/layers/meta-starlingx/meta-stx-distro: $(BDIR)/layers/meta-starlingx
 $(BDIR)/layers/meta-starlingx/meta-stx-flock: $(BDIR)/layers/meta-starlingx
@@ -80,11 +84,11 @@ $(BDIR)/layers/meta-starlingx:
 	$(Q)$(call layer-unpack, $@, $(STX_URL), $(STARLINGX_REV))
 
 RASPBERRYPI_URL = https://github.com/agherzan/meta-raspberrypi
-RASPBERRYPI_REV ?= 2d40b000021bc8a9ef7f329ed0ad410f8d227b97
+RASPBERRYPI_REV ?= $(BASE)
 $(BDIR)/layers/meta-raspberrypi:
 	$(Q)$(call layer-unpack, $@, $(RASPBERRYPI_URL), $(RASPBERRYPI_REV))
 
 QT5_URL = https://github.com/meta-qt5/meta-qt5.git
-QT5_REV ?= master
+QT5_REV ?= $(BASE)
 $(BDIR)/layers/meta-qt5:
 	$(Q)$(call layer-unpack, $@, $(QT5_URL), $(QT5_REV))
