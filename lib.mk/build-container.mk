@@ -1,4 +1,4 @@
-BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.6
+BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.7
 BUILD_CONTAINER ?= yocto-builder
 
 help:: build-container-help
