@@ -1,6 +1,6 @@
 .PHONY: $(BDIR)
 $(BDIR):
-	if [ ! -d $@ ]; then \
+	$(Q)if [ ! -d $@ ]; then \
 		mkdir -p $@/layers ; \
 		cd $@ ; \
 		$(call gitcache, $(POKY_URL), poky) ; \
