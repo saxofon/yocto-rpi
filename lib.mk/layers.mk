@@ -32,6 +32,17 @@ PYTHON2_REV ?= $(BASE)
 $(BDIR)/layers/meta-python2:
 	$(Q)$(call layer-unpack, $@, $(PYTHON2_URL), $(PYTHON2_REV))
 
+SWUPDATE_URL = https://github.com/sbabic/meta-swupdate.git
+SWUPDATE_REV ?= $(BASE)
+$(BDIR)/layers/meta-swupdate:
+	$(Q)$(call layer-unpack, $@, $(SWUPDATE_URL), $(SWUPDATE_REV))
+
+SWUPDATE_BOARDS_URL = https://github.com/sbabic/meta-swupdate-boards.git
+SWUPDATE_BOARDS_REV ?= $(BASE)
+$(BDIR)/layers/meta-swupdate-boards:
+	$(Q)$(call layer-unpack, $@, $(SWUPDATE_BOARDS_URL), $(SWUPDATE_BOARDS_REV))
+	sed -i s/honister/honister\ hardknott/g build/layers/meta-swupdate-boards/conf/layer.conf
+
 VIRTUALIZATION_URL = git://git.yoctoproject.org/meta-virtualization.git
 VIRTUALIZATION_REV ?= $(BASE)
 $(BDIR)/layers/meta-virtualization:
