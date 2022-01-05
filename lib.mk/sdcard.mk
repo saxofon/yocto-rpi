@@ -1,4 +1,4 @@
-SDCARD_IMAGE ?= $(TOP)/build/build/tmp/deploy/images/$(word 1,$(MACHINES))/$(word 1,$(IMAGES))-$(word 1,$(MACHINES)).rpi-sdimg
+SDCARD_IMAGE ?= $(TOP)/build/build/tmp/deploy/images/$(word 1,$(MACHINES))/$(word 1,$(IMAGES))-$(word 1,$(MACHINES)).wic
 SDCARD_DEV ?= /dev/mmcblk0
 
 sdcard-deploy:

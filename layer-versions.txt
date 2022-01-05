@@ -7,4 +7,7 @@ meta-openembedded_rev := 0b0ab6a2d227f22374268d29fcb8e4f9dab5374b
 # meta-project-setup is a local project layer
 # meta-python is an embedded layer in  build/layers/meta-openembedded
 meta-raspberrypi_rev := b4ec97e4eb8e36efd1f7e2f8ae020a9e55cfc239
+# meta-swupdate-board-rpizw is a local project layer
+meta-swupdate-boards_rev := 797dcca5a9d7373680370cfc6b469d29eec260fb
+meta-swupdate_rev := 637cf67edaf167577c0dc48fc577387c37466dc0
 poky_rev := f6ad205e1adb16f8bde715302f6a1d23ec7fba62

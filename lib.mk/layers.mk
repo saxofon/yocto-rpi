@@ -106,6 +106,17 @@ meta-raspberrypi_rev ?= $(BASE)
 build/layers/meta-raspberrypi:
 	$(Q)$(call layer-unpack, $@, $(meta-raspberrypi_url), $(meta-raspberrypi_rev))
 
+meta-swupdate_url = https://github.com/sbabic/meta-swupdate.git
+meta-swupdate_rev ?= $(BASE)
+$(BDIR)/layers/meta-swupdate:
+	$(Q)$(call layer-unpack, $@, $(meta-swupdate_url), $(meta-swupdate_rev))
+
+meta-swupdate-boards_url = https://github.com/sbabic/meta-swupdate-boards.git
+meta-swupdate-boards_rev ?= $(BASE)
+$(BDIR)/layers/meta-swupdate-boards:
+	$(Q)$(call layer-unpack, $@, $(meta-swupdate-boards_url), $(meta-swupdate-boards_rev))
+	sed -i s/honister/honister\ hardknott/g build/layers/meta-swupdate-boards/conf/layer.conf
+
 meta-qt5_url = https://github.com/meta-qt5/meta-qt5.git
 meta-qt5_rev ?= $(BASE)
 build/layers/meta-qt5:

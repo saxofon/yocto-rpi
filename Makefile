@@ -26,6 +26,7 @@ help:: top-help
 MACHINES += raspberrypi0-wifi
 
 IMAGES += core-image-full-cmdline
+IMAGES += update-image
 
 LAYERS += build/layers/meta-openembedded/meta-filesystems
 LAYERS += build/layers/meta-openembedded/meta-initramfs
@@ -34,8 +35,11 @@ LAYERS += build/layers/meta-openembedded/meta-oe
 LAYERS += build/layers/meta-openembedded/meta-perl
 LAYERS += build/layers/meta-openembedded/meta-python
 LAYERS += build/layers/meta-raspberrypi
+LAYERS += build/layers/meta-swupdate
+LAYERS += build/layers/meta-swupdate-boards
 
 LAYERS += $(TOP)/layers/meta-project-setup
+LAYERS += $(TOP)/layers/meta-swupdate-board-rpizw
 
 # Include any additional Makefile components
 -include $(TOP)/lib.mk/*.mk
