@@ -39,9 +39,10 @@ bitbake-debug:
 .PHONY: $(BDIR)/build
 $(BDIR)/build: $(BDIR) $(LAYERS)
 	$(Q)if [ ! -d $@ ]; then \
+		layers="$(realpath $(LAYERS))" ; \
 		cd $(BDIR) ; \
 		source poky/oe-init-build-env ; \
-		bitbake-layers add-layer -F $(LAYERS) ; \
+		bitbake-layers add-layer -F $$layers ; \
 		sed -i /^MACHINE/d conf/local.conf ; \
 		sed -i /^DISTRO/d conf/local.conf ; \
 		echo "DL_DIR = \"$(DOWNLOADS_CACHE)\"">> conf/local.conf ; \

@@ -1,4 +1,4 @@
-# A pure Yocto / RaspberryPi4 platform
+# A pure Yocto platform
 
 
 ## Initial setup
@@ -8,6 +8,10 @@ Fetch the project project repo as
 ```
 git clone https://github.com/saxofon/yocto-rpi.git
 ```
+
+## Configuration
+Layers are added in top Makefile, via "LAYERS +=" assignments.
+Locking of poky and layer versions is made via "make update-update-layer-lock"
 
 ## Build
 

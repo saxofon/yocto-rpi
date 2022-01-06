@@ -1,105 +1,123 @@
+MAKE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
+
 define layer-unpack
 	$(call gitcache, $(2), $(1))
 	git -C $(1) checkout $(3)
 endef
 
+define layer-rev
+	case $$(grep -w $$(basename $(1) .git) $(MAKE_PATH) | wc -l) in \
+	  0) echo "# $$(basename $(1) .git) is a local project layer" ;;  \
+	  1) master_layer="$$(grep -w $$(basename $(1) .git) $(MAKE_PATH) | cut -d: -f2)"; \
+	     echo "# $$(basename $(1) .git) is an embedded layer in $$master_layer"; \
+	     echo -n "$$(basename $$master_layer .git)_rev := "; \
+	     echo $$(git -C $$master_layer rev-parse HEAD) ;; \
+	  *) echo -n "$$(basename $(1) .git)_rev := "; \
+	     echo $$(git -C $(1) rev-parse HEAD) ;; \
+	esac
+endef
+
 layer-revisions:
-	$(foreach LAYER,$(LAYERS),git -C $(LAYER) rev-parse HEAD;)
+	$(Q)$(foreach LAYER, build/poky $(LAYERS), $(call layer-rev, $(LAYER));)
+
+update-layer-lock:
+	$(Q)make layer-revisions | grep -v ^make | sort | uniq > $(TOP)/layer-versions.txt
+	$(Q)if git diff --quiet layer-versions.txt; then \
+		echo "layer-versions.txt changed, please commit updates" ;\
+	fi
 
 #BASE=honister
 BASE=hardknott
 
-POKY_URL = git://git.yoctoproject.org/poky.git
-#POKY_URL = https://git.yoctoproject.org/git/poky
-#POKY_REV ?= yocto-3.4
-POKY_REV ?= $(BASE)
+poky_url = git://git.yoctoproject.org/poky.git
+poky_rev ?= $(BASE)
 
-OPENEMBEDDED_URL = https://github.com/openembedded/meta-openembedded.git
-OPENEMBEDDED_REV ?= $(BASE)
-$(BDIR)/layers/meta-openembedded/meta-filesystems: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-gnome: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-initramfs: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-networking: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-oe: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-perl: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-python: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded/meta-webserver: $(BDIR)/layers/meta-openembedded
-$(BDIR)/layers/meta-openembedded:
-	$(Q)$(call layer-unpack, $@, $(OPENEMBEDDED_URL), $(OPENEMBEDDED_REV))
+meta-openembedded_url = https://github.com/openembedded/meta-openembedded.git
+meta-openembedded_rev ?= $(BASE)
+build/layers/meta-openembedded/meta-filesystems: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-gnome: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-initramfs: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-networking: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-oe: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-perl: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-python: build/layers/meta-openembedded
+build/layers/meta-openembedded/meta-webserver: build/layers/meta-openembedded
+build/layers/meta-openembedded:
+	$(Q)$(call layer-unpack, $@, $(meta-openembedded_url), $(meta-openembedded_rev))
 
-PYTHON2_URL = git://git.openembedded.org/meta-python2
-PYTHON2_REV ?= $(BASE)
-$(BDIR)/layers/meta-python2:
-	$(Q)$(call layer-unpack, $@, $(PYTHON2_URL), $(PYTHON2_REV))
+meta-python2_url = git://git.openembedded.org/meta-python2
+meta-python2_rev ?= $(BASE)
+build/layers/meta-python2:
+	$(Q)$(call layer-unpack, $@, $(meta-python2_url), $(meta-python2_rev))
 
-SWUPDATE_URL = https://github.com/sbabic/meta-swupdate.git
-SWUPDATE_REV ?= $(BASE)
-$(BDIR)/layers/meta-swupdate:
-	$(Q)$(call layer-unpack, $@, $(SWUPDATE_URL), $(SWUPDATE_REV))
+meta-swupdate_url = https://github.com/sbabic/meta-swupdate.git
+meta-swupdate_rev ?= $(BASE)
+build/layers/meta-swupdate:
+	$(Q)$(call layer-unpack, $@, $(meta-swupdate_url), $(meta-swupdate_rev))
 
-SWUPDATE_BOARDS_URL = https://github.com/sbabic/meta-swupdate-boards.git
-SWUPDATE_BOARDS_REV ?= $(BASE)
-$(BDIR)/layers/meta-swupdate-boards:
-	$(Q)$(call layer-unpack, $@, $(SWUPDATE_BOARDS_URL), $(SWUPDATE_BOARDS_REV))
+meta-swupdate-boards_url = https://github.com/sbabic/meta-swupdate-boards.git
+meta-swupdate-boards_rev ?= $(BASE)
+build/layers/meta-swupdate-boards:
+	$(Q)$(call layer-unpack, $@, $(meta-swupdate-boards_url), $(meta-swupdate-boards_rev))
 	sed -i s/honister/honister\ hardknott/g build/layers/meta-swupdate-boards/conf/layer.conf
 
-VIRTUALIZATION_URL = git://git.yoctoproject.org/meta-virtualization.git
-VIRTUALIZATION_REV ?= $(BASE)
-$(BDIR)/layers/meta-virtualization:
-	$(Q)$(call layer-unpack, $@, $(VIRTUALIZATION_URL), $(VIRTUALIZATION_REV))
+meta-virtualization_url = git://git.yoctoproject.org/meta-virtualization.git
+meta-virtualization_rev ?= $(BASE)
+build/layers/meta-virtualization:
+	$(Q)$(call layer-unpack, $@, $(meta-virtualization_url), $(meta-virtualization_rev))
 
-CLOUDSERVICES_URL = git://git.yoctoproject.org/meta-cloud-services.git
-CLOUDSERVICES_REV ?= $(BASE)
-$(BDIR)/layers/meta-cloud-services/meta-openstack: $(BDIR)/layers/meta-cloud-services
-$(BDIR)/layers/meta-cloud-services:
-	$(Q)$(call layer-unpack, $@, $(CLOUDSERVICES_URL), $(CLOUDSERVICES_REV))
+meta-cloud-services_url = git://git.yoctoproject.org/meta-cloud-services.git
+meta-cloud-services_rev ?= $(BASE)
+build/layers/meta-cloud-services/meta-openstack: build/layers/meta-cloud-services
+build/layers/meta-cloud-services:
+	$(Q)$(call layer-unpack, $@, $(meta-cloud-services_url), $(meta-cloud-services_rev))
 
-ANACONDA_URL = git://git.yoctoproject.org/meta-anaconda
-ANACONDA_REV ?= $(BASE)
-$(BDIR)/layers/meta-anaconda:
-	$(Q)$(call layer-unpack, $@, $(ANACONDA_URL), $(ANACONDA_REV))
+meta-anaconda_url = git://git.yoctoproject.org/meta-anaconda
+meta-anaconda_rev ?= $(BASE)
+build/layers/meta-anaconda:
+	$(Q)$(call layer-unpack, $@, $(meta-anaconda_url), $(meta-anaconda_rev))
 
-INTEL_URL = git://git.yoctoproject.org/meta-intel.git
-INTEL_REV ?= $(BASE)
-$(BDIR)/layers/meta-intel:
-	$(Q)$(call layer-unpack, $@, $(INTEL_URL), $(INTEL_REV))
+meta-intel_url = git://git.yoctoproject.org/meta-intel.git
+meta-intel_rev ?= $(BASE)
+build/layers/meta-intel:
+	$(Q)$(call layer-unpack, $@, $(meta-intel_url), $(meta-intel_rev))
 
-DPDK_URL = git://git.yoctoproject.org/meta-dpdk.git
-DPDK_REV ?= $(BASE)
-$(BDIR)/layers/meta-dpdk:
-	$(Q)$(call layer-unpack, $@, $(DPDK_URL), $(DPDK_REV))
+meta-dpdk_url = git://git.yoctoproject.org/meta-dpdk.git
+meta-dpdk_rev ?= $(BASE)
+build/layers/meta-dpdk:
+	$(Q)$(call layer-unpack, $@, $(meta-dpdk_url), $(meta-dpdk_rev))
 
-SECURITY_URL = git://git.yoctoproject.org/meta-security.git
-SECURITY_REV ?= $(BASE)
-$(BDIR)/layers/meta-security:
-	$(Q)$(call layer-unpack, $@, $(SECURITY_URL), $(SECURITY_REV))
+meta-security_url = git://git.yoctoproject.org/meta-security.git
+meta-security_rev ?= $(BASE)
+build/layers/meta-security:
+	$(Q)$(call layer-unpack, $@, $(meta-security_url), $(meta-security_rev))
 
-SELINUX_URL = git://git.yoctoproject.org/meta-selinux.git
-SELINUX_REV ?= $(BASE)
-$(BDIR)/layers/meta-selinux:
-	$(Q)$(call layer-unpack, $@, $(SELINUX_URL), $(SELINUX_REV))
+meta-selinux_url = git://git.yoctoproject.org/meta-selinux.git
+meta-selinux_rev ?= $(BASE)
+build/layers/meta-selinux:
+	$(Q)$(call layer-unpack, $@, $(meta-selinux_url), $(meta-selinux_rev))
 
-IOTCLOUD_URL = https://github.com/intel-iot-devkit/meta-iot-cloud.git
-IOTCLOUD_REV ?= $(BASE)
-$(BDIR)/layers/meta-iot-cloud:
-	$(Q)$(call layer-unpack, $@, $(IOTCLOUD_URL), $(IOTCLOUD_REV))
+meta-iot-cloud_url = https://github.com/intel-iot-devkit/meta-iot-cloud.git
+meta-iot-cloud_rev ?= $(BASE)
+build/layers/meta-iot-cloud:
+	$(Q)$(call layer-unpack, $@, $(meta-iot-cloud_url), $(meta-iot-cloud_rev))
 
-STX_URL = https://opendev.org/starlingx/meta-starlingx.git
-STARLINGX_REV ?= $(BASE)
-$(BDIR)/layers/meta-starlingx/meta-stx-cloud: $(BDIR)/layers/meta-starlingx
-$(BDIR)/layers/meta-starlingx/meta-stx-distro: $(BDIR)/layers/meta-starlingx
-$(BDIR)/layers/meta-starlingx/meta-stx-flock: $(BDIR)/layers/meta-starlingx
-$(BDIR)/layers/meta-starlingx/meta-stx-integ: $(BDIR)/layers/meta-starlingx
-$(BDIR)/layers/meta-starlingx/meta-stx-virt: $(BDIR)/layers/meta-starlingx
-$(BDIR)/layers/meta-starlingx:
-	$(Q)$(call layer-unpack, $@, $(STX_URL), $(STARLINGX_REV))
+meta-starlingx_url = https://opendev.org/starlingx/meta-starlingx.git
+meta-starlingx_rev ?= $(BASE)
+build/layers/meta-starlingx/meta-stx-cloud: build/layers/meta-starlingx
+build/layers/meta-starlingx/meta-stx-distro: build/layers/meta-starlingx
+build/layers/meta-starlingx/meta-stx-flock: build/layers/meta-starlingx
+build/layers/meta-starlingx/meta-stx-integ: build/layers/meta-starlingx
+build/layers/meta-starlingx/meta-stx-virt: build/layers/meta-starlingx
+build/layers/meta-starlingx:
+	$(Q)$(call layer-unpack, $@, $(meta-starlingx_url), $(meta-starlingx_rev))
 
-RASPBERRYPI_URL = https://github.com/agherzan/meta-raspberrypi
-RASPBERRYPI_REV ?= $(BASE)
-$(BDIR)/layers/meta-raspberrypi:
-	$(Q)$(call layer-unpack, $@, $(RASPBERRYPI_URL), $(RASPBERRYPI_REV))
+meta-raspberrypi_url = https://github.com/agherzan/meta-raspberrypi
+meta-raspberrypi_rev ?= $(BASE)
+build/layers/meta-raspberrypi:
+	$(Q)$(call layer-unpack, $@, $(meta-raspberrypi_url), $(meta-raspberrypi_rev))
 
-QT5_URL = https://github.com/meta-qt5/meta-qt5.git
-QT5_REV ?= $(BASE)
-$(BDIR)/layers/meta-qt5:
-	$(Q)$(call layer-unpack, $@, $(QT5_URL), $(QT5_REV))
+meta-qt5_url = https://github.com/meta-qt5/meta-qt5.git
+meta-qt5_rev ?= $(BASE)
+build/layers/meta-qt5:
+	$(Q)$(call layer-unpack, $@, $(meta-qt5_url), $(meta-qt5_rev))
