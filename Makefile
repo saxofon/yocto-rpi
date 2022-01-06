@@ -27,16 +27,13 @@ MACHINES += raspberrypi0-wifi
 
 IMAGES += core-image-base
 
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-filesystems
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-gnome
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-initramfs
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-networking
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-oe
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-perl
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-python
-LAYERS += $(BDIR)/layers/meta-openembedded/meta-webserver
-
-LAYERS += $(BDIR)/layers/meta-raspberrypi
+LAYERS += build/layers/meta-openembedded/meta-filesystems
+LAYERS += build/layers/meta-openembedded/meta-initramfs
+LAYERS += build/layers/meta-openembedded/meta-networking
+LAYERS += build/layers/meta-openembedded/meta-oe
+LAYERS += build/layers/meta-openembedded/meta-perl
+LAYERS += build/layers/meta-openembedded/meta-python
+LAYERS += build/layers/meta-raspberrypi
 
 LAYERS += $(TOP)/layers/meta-project-setup
 
