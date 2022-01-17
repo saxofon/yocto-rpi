@@ -1,3 +1,4 @@
+meta-clang_rev := 2207df98559afc19d6a0243027bbac18980fc764
 # meta-filesystems is an embedded layer in  build/layers/meta-openembedded
 # meta-initramfs is an embedded layer in  build/layers/meta-openembedded
 # meta-networking is an embedded layer in  build/layers/meta-openembedded

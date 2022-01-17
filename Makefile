@@ -34,6 +34,7 @@ LAYERS += build/layers/meta-openembedded/meta-networking
 LAYERS += build/layers/meta-openembedded/meta-oe
 LAYERS += build/layers/meta-openembedded/meta-perl
 LAYERS += build/layers/meta-openembedded/meta-python
+LAYERS += build/layers/meta-clang
 LAYERS += build/layers/meta-swupdate
 LAYERS += build/layers/meta-swupdate-boards
 LAYERS += build/layers/meta-raspberrypi

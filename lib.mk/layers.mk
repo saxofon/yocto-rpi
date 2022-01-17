@@ -1,5 +1,8 @@
 MAKE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 
+#BASE=honister
+BASE=hardknott
+
 define layer-unpack
 	$(call gitcache, $(2), $(1))
 	git -C $(1) checkout $(3)
@@ -25,9 +28,6 @@ update-layer-lock:
 	$(Q)if git diff --quiet layer-versions.txt; then \
 		echo "layer-versions.txt changed, please commit updates" ;\
 	fi
-
-#BASE=honister
-BASE=hardknott
 
 poky_url = git://git.yoctoproject.org/poky.git
 poky_rev ?= $(BASE)
@@ -111,6 +111,11 @@ build/layers/meta-starlingx/meta-stx-integ: build/layers/meta-starlingx
 build/layers/meta-starlingx/meta-stx-virt: build/layers/meta-starlingx
 build/layers/meta-starlingx:
 	$(Q)$(call layer-unpack, $@, $(meta-starlingx_url), $(meta-starlingx_rev))
+
+meta-clang_url = https://github.com/kraj/meta-clang.git
+meta-clang_rev ?= $(BASE)
+build/layers/meta-clang:
+	$(Q)$(call layer-unpack, $@, $(meta-clang_url), $(meta-clang_rev))
 
 meta-raspberrypi_url = https://github.com/agherzan/meta-raspberrypi
 meta-raspberrypi_rev ?= $(BASE)
