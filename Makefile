@@ -25,7 +25,7 @@ help:: top-help
 #MACHINES += raspberrypi4-64
 MACHINES += raspberrypi0-wifi
 
-IMAGES += core-image-base
+IMAGES += core-image-full-cmdline
 
 LAYERS += build/layers/meta-openembedded/meta-filesystems
 LAYERS += build/layers/meta-openembedded/meta-initramfs
