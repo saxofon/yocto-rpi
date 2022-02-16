@@ -106,6 +106,11 @@ meta-raspberrypi_rev ?= $(BASE)
 build/layers/meta-raspberrypi:
 	$(Q)$(call layer-unpack, $@, $(meta-raspberrypi_url), $(meta-raspberrypi_rev))
 
+meta-rauc_url = https://github.com/rauc/meta-rauc
+meta-rauc_rev ?= $(BASE)
+build/layers/meta-rauc:
+	$(Q)$(call layer-unpack, $@, $(meta-rauc_url), $(meta-rauc_rev))
+
 meta-qt5_url = https://github.com/meta-qt5/meta-qt5.git
 meta-qt5_rev ?= $(BASE)
 build/layers/meta-qt5:

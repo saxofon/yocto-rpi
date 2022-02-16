@@ -34,6 +34,7 @@ LAYERS += build/layers/meta-openembedded/meta-oe
 LAYERS += build/layers/meta-openembedded/meta-perl
 LAYERS += build/layers/meta-openembedded/meta-python
 LAYERS += build/layers/meta-raspberrypi
+LAYERS += build/layers/meta-rauc
 
 LAYERS += $(TOP)/layers/meta-project-setup
 
