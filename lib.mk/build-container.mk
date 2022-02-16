@@ -14,11 +14,13 @@ build-container-help:
 build-container-image:
 	docker build --no-cache -f dockerfiles/yocto-builder -t $(BUILD_CONTAINER_IMAGE) dockerfiles
 
+#		-v $(DOWNLOADS_CACHE):/cache/downloads:shared,Z \
+#		-v $(SSTATE_MIRROR):/cache/sstate-mirror:shared \
+#
 build-container-start:
 	$(Q)docker run --rm -d --name $(BUILD_CONTAINER) -u builder \
-		-v $(DOWNLOADS_CACHE):/cache/downloads:shared,Z \
-		-v $(SSTATE_MIRROR):/cache/sstate-mirror:shared \
 		-v $(shell pwd):$(shell pwd):shared,Z \
+		-v yocto-rpi-cache:/cache:shared \
 		-it $(BUILD_CONTAINER_IMAGE) /bin/bash
 
 build-container-shell:
