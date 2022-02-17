@@ -1,3 +1,5 @@
+SSTATE_LOCAL ?= $(BDIR)/build/sstate-cache
+
 help:: sstate.help
 
 sstate.help:
