@@ -1,10 +1,7 @@
-.PHONY: $(BDIR)
-$(BDIR):
+build/poky:
 	$(Q)if [ ! -d $@ ]; then \
-		mkdir -p $@/layers ; \
-		cd $@ ; \
-		$(call gitcache, $(poky_url), poky) ; \
-		git -C poky checkout $(poky_rev) ; \
+		mkdir -p build/layers ; \
+		$(call gitcache, $(poky_url), $@, $(poky_rev)) ;\
 	fi
 
 clean::

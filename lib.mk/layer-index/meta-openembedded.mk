@@ -9,4 +9,4 @@ build/layers/meta-openembedded/meta-perl: build/layers/meta-openembedded
 build/layers/meta-openembedded/meta-python: build/layers/meta-openembedded
 build/layers/meta-openembedded/meta-webserver: build/layers/meta-openembedded
 build/layers/meta-openembedded:
-	$(Q)$(call layer-unpack, $@, $(meta-openembedded_url), $(meta-openembedded_rev))
+	$(Q)$(call gitcache, $(meta-openembedded_url), $@, $(meta-openembedded_rev))

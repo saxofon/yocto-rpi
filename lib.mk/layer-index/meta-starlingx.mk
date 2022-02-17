@@ -6,4 +6,4 @@ build/layers/meta-starlingx/meta-stx-flock: build/layers/meta-starlingx
 build/layers/meta-starlingx/meta-stx-integ: build/layers/meta-starlingx
 build/layers/meta-starlingx/meta-stx-virt: build/layers/meta-starlingx
 build/layers/meta-starlingx:
-	$(Q)$(call layer-unpack, $@, $(meta-starlingx_url), $(meta-starlingx_rev))
+	$(Q)$(call gitcache, $(meta-starlingx_url), $@, $(meta-starlingx_rev))

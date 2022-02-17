@@ -3,11 +3,6 @@ MAKE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 #BASE=honister
 BASE=hardknott
 
-define layer-unpack
-	$(call gitcache, $(2), $(1))
-	git -C $(1) checkout $(3)
-endef
-
 define layer-rev
 	case $$(grep -w $$(basename $(1) .git) $(MAKE_PATH) | wc -l) in \
 	  0) echo "# $$(basename $(1) .git) is a local project layer" ;;  \
@@ -29,4 +24,4 @@ update-layer-lock:
 		echo "layer-versions.txt changed, please commit updates" ;\
 	fi
 
--include layer-index/*.mk
+-include lib.mk/layer-index/*.mk

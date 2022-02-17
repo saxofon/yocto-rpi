@@ -17,6 +17,7 @@ define gitcache
 		git -C $(2) remote add upstream $(1) ; \
 		find $(DOWNLOADS_CACHE)/git2 -type d -empty -exec touch {}/.gitkeep \; ; \
 	fi ; \
+	git -C $(2) checkout $(3) ; \
 	chmod -R -f g+w $(2)
 endef
 

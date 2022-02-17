@@ -36,8 +36,8 @@ endef
 bitbake-debug:
 	echo $(LAYERS)
 
-.PHONY: $(BDIR)/build
-$(BDIR)/build: $(BDIR) $(LAYERS)
+.PHONY: build/build
+build/build: build/poky $(LAYERS)
 	$(Q)if [ ! -d $@ ]; then \
 		layers="$(realpath $(LAYERS))" ; \
 		cd $(BDIR) ; \
@@ -51,18 +51,18 @@ $(BDIR)/build: $(BDIR) $(LAYERS)
 		fi ; \
 	fi
 
-images: $(BDIR)/build
+images: build/build
 ifneq ($(IMAGES),)
 	$(Q)$(foreach MACHINE,$(MACHINES),$(call bitbake,$(MACHINE),$(IMAGES));)
 endif
 
-containers: $(BDIR)/build
+containers: build/build
 ifneq ($(CONTAINERS),)
 	$(Q)$(foreach MACHINE,$(MACHINES),$(call bitbake,$(MACHINE),$(CONTAINERS));)
 endif
 
 # When entering bitbake shell, default MACHINE to the first in list
-bbs: $(BDIR)/build
+bbs: build/build
 	$(Q)cd $(BDIR) ; \
 	export MACHINE=$(word 1,$(MACHINES)) ; \
 	source poky/oe-init-build-env ; \
