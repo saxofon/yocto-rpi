@@ -1,4 +1,4 @@
-BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.7
+BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.8
 BUILD_CONTAINER ?= yocto-builder
 
 help:: build-container-help
@@ -34,4 +34,4 @@ build-container-exec:
 	$(Q)docker exec -u builder -w /src -e LANG=en_US.UTF-8 -it $(BUILD_CONTAINER) $(CMD)
 
 build-container-stop:
-	$(Q)docker kill $(BUILD_CONTAINER)
+	$(Q)docker stop $(BUILD_CONTAINER)

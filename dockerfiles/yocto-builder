@@ -16,11 +16,16 @@ RUN apt-get install -y bash build-essential git-core wget socat chrpath cpio unz
   && ln -sf /bin/bash /bin/sh \
   && sed s#^SHELL.*#SHELL=/bin/bash#g -i /etc/default/useradd
 
-RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc && chmod +x /usr/bin/mc
+#RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc && chmod +x /usr/bin/mc
 
 RUN useradd -m -c "My name is Builder, Yocto Builder" -G users builder \
     && echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
+RUN mkdir -p /cache/downloads
+RUN mkdir -p /cache/sstate-mirror
+RUN mkdir -p /src/build
+RUN chown -R builder /cache/downloads /cache/sstate-mirror /src/build
+
 USER builder
 
-RUN mkdir -p ~/.mc && chmod 777 ~/.mc
+#RUN mkdir -p ~/.mc && chmod 777 ~/.mc
