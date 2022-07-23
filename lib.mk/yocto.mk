@@ -1,6 +1,6 @@
-build/poky:
+$(BDIR)/poky:
 	$(Q)if [ ! -d $@ ]; then \
-		mkdir -p build/layers ; \
+		mkdir -p $@ ; \
 		$(call gitcache, $(poky_url), $@, $(poky_rev)) ;\
 	fi
 

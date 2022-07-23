@@ -23,8 +23,8 @@ RUN useradd -m -c "My name is Builder, Yocto Builder" -G users builder \
 
 RUN mkdir -p /cache/downloads
 RUN mkdir -p /cache/sstate-mirror
-RUN mkdir -p /src/build
-RUN chown -R builder /cache/downloads /cache/sstate-mirror /src/build
+RUN mkdir -p /build
+RUN chown -R builder /cache/downloads /cache/sstate-mirror /build
 
 USER builder
 

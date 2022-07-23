@@ -1,0 +1,44 @@
+# Building yocto takes too much time of course for free accounts
+# limitations (due to build size) so not enabled per default.
+name: CI
+on:
+  push:
+    branches:
+#      - project/yacht-server
+    tags:
+      - v*
+  pull_request:
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.io/saxofon/yocto-builder:0.9
+      options: --user 1000
+      volumes:
+        - yocto-rpi-cache:/cache
+        - yocto-rpi-build:/build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Workaround to allow action to run as yocto-builder
+        run: sudo chmod 777 /cache /build
+      - name: debug1
+        run: id
+      - name: debug2
+        run: pwd
+      - name: debug3
+        run: ls -ld .
+      - name: debug4
+        run: ls -l
+      - name: debug5
+        run: ls -ld /cache
+      - name: debug6
+        run: ls -l /cache /cache/downloads /cache/sstate-mirror
+      - name: debug7
+        run: ls -ld /build
+      - name: debug8
+        run: ls -l /build
+      - name: Build images
+        run: make images
+      - name: Update sstate cache
+        run: make sstate-update

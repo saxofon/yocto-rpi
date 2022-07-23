@@ -2,4 +2,5 @@ build
 cache
 ./build*
 ./cache*
+artifacts
 *.swp

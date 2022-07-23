@@ -10,18 +10,16 @@
    URL : https://github.com/saxofon/yocto-rpi.git
    Branch : master
    Script path : pipelines/yocto-rpi.groovy
-			args '--mount type=volume,src=jenkins_home,target=/var/jenkins_home'
-			args '--mount type=volume,src=yocto-rpi-build,target=${env.WORKSPACE}/build'
-			args '--mount type=volume,src=yocto-rpi-cache,target=/cache'
-			args '-v /opt/yocto-rpi-cache:/cache:Z'
 			args '--entrypoint=""'
 */
 
 pipeline {
 	agent {
 		docker {
-			image 'docker.io/saxofon/yocto-builder:0.7'
-			args '--mount type=volume,src=yocto-rpi-cache,target=/cache'
+			image 'docker.io/saxofon/yocto-builder:0.9'
+			args '--mount type=volume,src=yocto-build-yacht-server,target=/build'
+			args '--mount type=volume,src=yocto-cache-downloads,target=/cache/downloads'
+			args '--mount type=volume,src=yocto-cache-sstate-mirror-project-yacht-server,target=/cache/sstate-mirror'
 		/*	reuseNode true */
 		}
 	}
@@ -34,7 +32,7 @@ pipeline {
 	parameters {
 		string(
 			name: 'BRANCH',
-			defaultValue: 'topic/cache-as-container-volume',
+			defaultValue: 'project/yacht-server',
 			description: 'Add branch to build'
 		)
 		booleanParam(

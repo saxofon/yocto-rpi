@@ -5,7 +5,7 @@
 
 SHELL		:= /bin/bash
 TOP 		:= $(shell pwd)
-BDIR            := $(TOP)/build
+BDIR            := /build
 
 # Define V=1 to echo everything
 V ?= 0
@@ -27,13 +27,13 @@ MACHINES += raspberrypi4-64
 
 IMAGES += core-image-full-cmdline
 
-LAYERS += build/layers/meta-openembedded/meta-filesystems
-LAYERS += build/layers/meta-openembedded/meta-initramfs
-LAYERS += build/layers/meta-openembedded/meta-networking
-LAYERS += build/layers/meta-openembedded/meta-oe
-LAYERS += build/layers/meta-openembedded/meta-perl
-LAYERS += build/layers/meta-openembedded/meta-python
-LAYERS += build/layers/meta-raspberrypi
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-filesystems
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-initramfs
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-networking
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-oe
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-perl
+LAYERS += $(BDIR)/layers/meta-openembedded/meta-python
+LAYERS += $(BDIR)/layers/meta-raspberrypi
 
 LAYERS += $(TOP)/layers/meta-project-setup
 

@@ -1,5 +1,5 @@
-BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.8
-BUILD_CONTAINER ?= yocto-builder
+BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.9
+BUILD_CONTAINER ?= yocto-builder-$(shell git branch --show-current | tr / -)
 
 help:: build-container-help
 
@@ -14,14 +14,12 @@ build-container-help:
 build-container-image:
 	docker build --no-cache -f dockerfiles/yocto-builder -t $(BUILD_CONTAINER_IMAGE) dockerfiles
 
-#		-v $(DOWNLOADS_CACHE):/cache/downloads:shared,Z \
-#		-v $(SSTATE_MIRROR):/cache/sstate-mirror:shared \
-#
 build-container-start:
 	$(Q)docker run --rm -d --name $(BUILD_CONTAINER) -u builder \
 		-v $(PWD):/src:Z \
-		--mount type=volume,src=yocto-rpi-build,target=/src/build \
-		--mount type=volume,src=yocto-rpi-cache,target=/cache \
+		--mount type=volume,src=yocto-cache-downloads,target=/cache/downloads \
+		--mount type=volume,src=yocto-build-$(shell git branch --show-current | tr / -),target=/build \
+		--mount type=volume,src=yocto-cache-sstate-mirror-$(shell git branch --show-current | tr / -),target=/cache/sstate-mirror \
 		-it $(BUILD_CONTAINER_IMAGE) /bin/bash
 
 build-container-shell:

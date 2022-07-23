@@ -1,8 +1,8 @@
 SSTATE_LOCAL ?= $(BDIR)/build/sstate-cache
 
-help:: sstate.help
+help:: sstate-help
 
-sstate.help:
+sstate-help:
 	$(Q)echo -e "\n--- sstate ---"
 	$(Q)echo -e "sstate-update             : update $(SSTATE_MIRROR) with contents from $(SSTATE_LOCAL)"
 

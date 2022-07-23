@@ -16,7 +16,7 @@ define layer-rev
 endef
 
 layer-revisions:
-	$(Q)$(foreach LAYER, build/poky $(LAYERS), $(call layer-rev, $(LAYER));)
+	$(Q)$(foreach LAYER, $(BDIR)/poky $(LAYERS), $(call layer-rev, $(LAYER));)
 
 update-layer-lock:
 	$(Q)make layer-revisions | grep -v ^make | sort | uniq > $(TOP)/layer-versions.txt

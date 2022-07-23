@@ -1,6 +1,6 @@
-help:: bitbake.help
+help:: bitbake-help
 
-bitbake.help:
+bitbake-help:
 	$(Q)echo -e "\n--- bitbake ---"
 	$(Q)echo -e "images                    : build all images for all machines"
 	$(Q)echo -e "containers                : build all containers for all machines"
@@ -36,8 +36,8 @@ endef
 bitbake-debug:
 	echo $(LAYERS)
 
-.PHONY: build/build
-build/build: build/poky $(LAYERS)
+.PHONY: $(BDIR)/build
+$(BDIR)/build: $(BDIR)/poky $(LAYERS)
 	$(Q)if [ ! -d $@ ]; then \
 		layers="$(realpath $(LAYERS))" ; \
 		cd $(BDIR) ; \
@@ -51,18 +51,18 @@ build/build: build/poky $(LAYERS)
 		fi ; \
 	fi
 
-images: build/build
+images: $(BDIR)/build
 ifneq ($(IMAGES),)
 	$(Q)$(foreach MACHINE,$(MACHINES),$(call bitbake,$(MACHINE),$(IMAGES));)
 endif
 
-containers: build/build
+containers: $(BDIR)/build
 ifneq ($(CONTAINERS),)
 	$(Q)$(foreach MACHINE,$(MACHINES),$(call bitbake,$(MACHINE),$(CONTAINERS));)
 endif
 
 # When entering bitbake shell, default MACHINE to the first in list
-bbs: build/build
+bbs: $(BDIR)/build
 	$(Q)cd $(BDIR) ; \
 	export MACHINE=$(word 1,$(MACHINES)) ; \
 	source poky/oe-init-build-env ; \
