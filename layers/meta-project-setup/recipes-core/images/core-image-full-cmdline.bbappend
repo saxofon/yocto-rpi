@@ -1,3 +1,4 @@
+IMAGE_INSTALL += "gpsd"
 IMAGE_INSTALL += "i2c-tools"
 IMAGE_INSTALL += "iw"
 IMAGE_INSTALL += "kernel-modules"
