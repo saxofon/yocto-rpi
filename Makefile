@@ -27,6 +27,8 @@ MACHINES += raspberrypi4-64
 
 IMAGES += core-image-full-cmdline
 
+LAYERS += $(BDIR)/layers/meta-javascripts
+LAYERS += $(BDIR)/layers/meta-marine-instruments
 LAYERS += $(BDIR)/layers/meta-openembedded/meta-filesystems
 LAYERS += $(BDIR)/layers/meta-openembedded/meta-initramfs
 LAYERS += $(BDIR)/layers/meta-openembedded/meta-networking
