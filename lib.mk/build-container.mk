@@ -1,4 +1,4 @@
-BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.9
+BUILD_CONTAINER_IMAGE ?= docker.io/saxofon/yocto-builder:0.10
 BUILD_CONTAINER ?= yocto-builder-$(shell git branch --show-current | tr / -)
 
 help:: build-container-help
