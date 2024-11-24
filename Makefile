@@ -37,6 +37,9 @@ LAYERS += $(BDIR)/layers/meta-raspberrypi
 
 LAYERS += $(TOP)/layers/meta-project-setup
 
+LAYERS += $(BDIR)/layers/meta-javascripts
+LAYERS += $(BDIR)/layers/meta-marine-instruments
+
 # Include any additional Makefile components
 -include $(TOP)/lib.mk/*.mk
 
