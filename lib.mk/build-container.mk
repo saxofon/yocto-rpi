@@ -17,8 +17,8 @@ build-container-image:
 build-container-start:
 	$(Q)docker run --rm -d --name $(BUILD_CONTAINER) -u builder \
 		-v $(PWD):/src:Z \
+		--mount type=volume,src=yocto-$(shell git branch --show-current | tr / -),target=/build \
 		--mount type=volume,src=yocto-cache-downloads,target=/cache/downloads \
-		--mount type=volume,src=yocto-build-$(shell git branch --show-current | tr / -),target=/build \
 		--mount type=volume,src=yocto-cache-sstate-mirror-$(shell git branch --show-current | tr / -),target=/cache/sstate-mirror \
 		-it $(BUILD_CONTAINER_IMAGE) /bin/bash
 

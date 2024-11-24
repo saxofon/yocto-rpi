@@ -1,5 +1,4 @@
-#BASE=honister
-BASE=hardknott
+BASE=scarthgap
 
 define layer-rev
 	case $$(grep -w $$(basename $(1) .git) lib.mk/layer-index/*.mk | wc -l) in \
