@@ -33,12 +33,10 @@ jobs:
       - name: debug5
         run: ls -ld /cache
       - name: debug6
-        run: ls -l /cache /cache/downloads /cache/sstate-mirror
+        run: ls -l /cache /cache/downloads /cache/sstate
       - name: debug7
         run: ls -ld /build
       - name: debug8
         run: ls -l /build
       - name: Build images
         run: make images
-      - name: Update sstate cache
-        run: make sstate-update

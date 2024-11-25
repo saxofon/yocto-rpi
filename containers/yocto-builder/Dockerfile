@@ -8,9 +8,9 @@ RUN apt-get clean && apt-get update \
 
 RUN DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
-RUN apt-get install -y bash build-essential git-core wget socat chrpath cpio unzip texinfo \
+RUN apt-get install -y bash build-essential file git-core wget socat chrpath cpio unzip texinfo \
      gawk diffstat gcc-multilib xz-utils iputils-ping \
-     python3 python3-pip python3-pexpect python3-git python3-jinja2 pylint3 \
+     python3 python3-pip python3-pexpect python3-git python3-jinja2 pylint \
      libfindbin-libs-perl \
      libelf-dev bison flex bc kmod jq rsync sudo cifs-utils \
      lz4 xz-utils zstd \
@@ -18,16 +18,12 @@ RUN apt-get install -y bash build-essential git-core wget socat chrpath cpio unz
   && ln -sf /bin/bash /bin/sh \
   && sed s#^SHELL.*#SHELL=/bin/bash#g -i /etc/default/useradd
 
-#RUN wget https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc && chmod +x /usr/bin/mc
-
 RUN useradd -m -c "My name is Builder, Yocto Builder" -G users builder \
     && echo 'builder ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 RUN mkdir -p /cache/downloads
-RUN mkdir -p /cache/sstate-mirror
+RUN mkdir -p /cache/sstate
 RUN mkdir -p /build
-RUN chown -R builder /cache/downloads /cache/sstate-mirror /build
+RUN chown -R builder /cache/downloads /cache/sstate /build
 
 USER builder
-
-#RUN mkdir -p ~/.mc && chmod 777 ~/.mc

@@ -35,9 +35,7 @@ LAYERS += $(BDIR)/layers/meta-openembedded/meta-perl
 LAYERS += $(BDIR)/layers/meta-openembedded/meta-python
 LAYERS += $(BDIR)/layers/meta-raspberrypi
 
-#LAYERS += $(BDIR)/layers/meta-javascripts
-#LAYERS += $(BDIR)/layers/meta-marine-instruments
-#LAYERS += $(TOP)/layers/meta-project-setup
+LAYERS += $(TOP)/layers/meta-project-setup
 
 # Include any additional Makefile components
 -include $(TOP)/lib.mk/*.mk

@@ -46,8 +46,8 @@ $(BDIR)/build: $(BDIR)/poky $(LAYERS)
 		sed -i /^MACHINE/d conf/local.conf ; \
 		sed -i /^DISTRO/d conf/local.conf ; \
 		echo "DL_DIR = \"$(DOWNLOADS_CACHE)\"">> conf/local.conf ; \
-		if [ $(SSTATE_MIRROR) ]; then \
-			echo "SSTATE_MIRRORS = \"file://.* file://$(SSTATE_MIRROR)/PATH\"" >> conf/local.conf ; \
+		if [ $(SSTATE_DIR) ]; then \
+			echo "SSTATE_DIR = \"$(SSTATE_DIR)\"" >> conf/local.conf ; \
 		fi ; \
 	fi
 

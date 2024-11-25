@@ -19,7 +19,7 @@ pipeline {
 			image 'docker.io/saxofon/yocto-builder:0.9'
 			args '--mount type=volume,src=yocto-build-yacht-server,target=/build'
 			args '--mount type=volume,src=yocto-cache-downloads,target=/cache/downloads'
-			args '--mount type=volume,src=yocto-cache-sstate-mirror-project-yacht-server,target=/cache/sstate-mirror'
+			args '--mount type=volume,src=yocto-cache-sstate-project-yacht-server,target=/cache/sstate'
 		/*	reuseNode true */
 		}
 	}
@@ -44,11 +44,6 @@ pipeline {
 			name: 'CACHE_BUILD',
 			defaultValue: false,
 			description: 'Rebuild from cache'
-		)
-		booleanParam(
-			name: 'SSTATE_UPDATE',
-			defaultValue: true,
-			description: 'Update sstate cache after sucessful build'
 		)
 	}
 
@@ -83,16 +78,5 @@ pipeline {
 				sh "make images"
 			}
 		}
-		stage("Update sstate cache") {
-			when {
-				expression {
-					params.SSTATE_UPDATE == true
-				}
-			}
-			steps {
-				sh "make sstate-update"
-			}
-		}
-		
 	}
 }

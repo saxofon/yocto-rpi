@@ -7,8 +7,6 @@
    Pipeline :
    Pipeline script from SCM
    SCM : git
-   URL : https://gitlab.training-aws.wrstudio.cloud/phallsma/yocto-rpi.git
-   URL : https://gitlab.pstraining3.wrstudio1.cloud/phallsma/yocto-rpi.git
    URL : https://github.com/saxofon/yocto-rpi.git
    Branch : topic/jenkins-kubernetes-pipelines
    Script path : pipelines/yocto-build-kubernetes.groovy
@@ -48,11 +46,6 @@ pipeline {
 			name: 'CACHE_BUILD',
 			defaultValue: false,
 			description: 'Rebuild from cache'
-		)
-		booleanParam(
-			name: 'SSTATE_UPDATE',
-			defaultValue: true,
-			description: 'Update sstate cache after sucessful build'
 		)
 	}
 	stages {
@@ -105,7 +98,7 @@ pipeline {
 					//sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache / || true"
 					//sh "ls /cache"
 					//sh "ls /cache/downloads || true"
-					//sh "ls /cache/sstate-mirror || true"
+					//sh "ls /cache/sstate || true"
 					sh "./mc cp --quiet --recursive minio/${params.PARAM5}/cache.tar /tmp || true"
 					sh "tar -C /cache -xf /tmp/cache.tar || true"
 				}
@@ -141,18 +134,6 @@ pipeline {
 				sh "make images"
 			}
 		}
-		stage("Update sstate cache") {
-			when {
-				allOf {
-					expression {
-						params.SSTATE_UPDATE == true
-					}
-				}
-			}
-			steps {
-				sh "make sstate-update"
-			}
-		}
 		stage("postbuild workaround for cache storage") {
 			when {
 				allOf {
@@ -171,7 +152,7 @@ pipeline {
 					//sh "./mc ls minio/${params.PARAM5} || true"
 					//sh "./mc ls minio/${params.PARAM5}/cache || true"
 					//sh "./mc ls minio/${params.PARAM5}/cache/downloads || true"
-					//sh "./mc ls minio/${params.PARAM5}/cache/sstate-mirror || true"
+					//sh "./mc ls minio/${params.PARAM5}/cache/sstate || true"
 					sh "tar -C /cache -cf /tmp/cache.tar ."
 					sh "./mc cp --quiet /tmp/cache.tar minio/${params.PARAM5} || true"
 				}

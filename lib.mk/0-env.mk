@@ -1,2 +1,2 @@
-DOWNLOADS_CACHE     ?= /cache/downloads
-SSTATE_MIRROR       ?= /cache/sstate-mirror
+DOWNLOADS_CACHE = /cache/downloads
+SSTATE_DIR = /cache/sstate
