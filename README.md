@@ -108,7 +108,7 @@ sys     0m0.112s
 builder@1901a526558c:/src$
 ```
 
-#### Rebuild with a packaged added (in this case gpsd, that needed some dependencies as well)
+#### Rebuild with a package added (in this case gpsd, that needed some dependencies as well)
 ```
 builder@1901a526558c:/src$ time make images
 
@@ -172,38 +172,27 @@ sys     0m0.114s
 builder@1901a526558c:/src$
 ```
 
-
-#### Update sstate cache
-When project moves on, new additions can be pushed to sstate cache in order to accelerate
-builds also for these new additions :
-
-```
-make sstate-update
-```
-
-Commonly done during new release build in a pipeline or so.
-
 #### To create the container image
+This uses a container setup file as of dockerfiles/yocto-builder. It can easily be adjusted
+in case more host tools or so is needed for some specific platform build.
 ```
 make build-container-image
 ```
-This uses a container setup file as of dockerfiles/yocto-builder. It can easily be adjusted
-in case more host tools or so is needed for some specific platform build.
 
 #### Start the container
+This starts the container via docker utility in detached mode.
 ```
 make build-container-start
 ```
-This starts the container via docker utility in detached mode.
 
 #### Start the build container shell for interactive usage
+When there is need for interactive building, during development or so, we can get a shell this way.
 ```
 make build-container-shell
 ```
-When there is need for interactive building, during development or so, we can get a shell this way.
 
 ### Direct execute of a command in the build container
+For automating/scripting things, this would be the "API".
 ```
 make build-container-exec CMD=top
 ```
-For automating/scripting things, this would be the "API".
