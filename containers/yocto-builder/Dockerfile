@@ -9,7 +9,7 @@ RUN apt-get clean && apt-get update \
 RUN DEBIAN_FRONTEND="noninteractive" apt install -y tzdata
 
 RUN apt-get install -y bash build-essential file git-core wget socat chrpath cpio unzip texinfo \
-     gawk diffstat gcc-multilib xz-utils iputils-ping \
+     gawk diffstat xz-utils iputils-ping \
      python3 python3-pip python3-pexpect python3-git python3-jinja2 pylint \
      libfindbin-libs-perl \
      libelf-dev bison flex bc kmod jq rsync sudo cifs-utils \
