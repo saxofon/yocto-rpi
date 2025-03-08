@@ -10,6 +10,8 @@ on:
   pull_request:
 jobs:
   push:
+    # cannot run heavy yocto builds in github free account
+    if: false
     runs-on: ubuntu-latest
     container:
       image: docker.io/saxofon/yocto-builder:0.9
