@@ -2,6 +2,9 @@
 
 We can also do small build servers, like a Raspberry Pi 5 for example :)
 
+3.5W idle (with PoE and SSD hat)
+9.72W full build in process
+
 ## full build
 ```
 per@bj-rpi5-1:~/fs/rpi/yocto-rpi $ make build-container-start
