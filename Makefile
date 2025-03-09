@@ -36,6 +36,7 @@ LAYERS += $(BDIR)/layers/meta-openembedded/meta-python
 LAYERS += $(BDIR)/layers/meta-raspberrypi
 
 LAYERS += $(TOP)/layers/meta-project-setup
+LAYERS += $(TOP)/layers/meta-sbom-cve
 
 # Include any additional Makefile components
 -include $(TOP)/lib.mk/*.mk
